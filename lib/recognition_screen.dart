@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:image_recognizer/styles.dart';
-import 'package:image_recognizer/widget/plant_photo_view.dart';
+import 'package:image_recognizer/widget/image_view.dart';
 import 'classifier/classifier.dart';
 
 const _labelsFileName = 'assets/labels.txt';
 const _modelFileName = 'model_unquant.tflite';
 
-class ImageRecognizer extends StatefulWidget {
-  const ImageRecognizer({super.key});
+class RecognitionScreen extends StatefulWidget {
+  const RecognitionScreen({super.key});
 
   @override
-  State<ImageRecognizer> createState() => _ImageRecognizerState();
+  State<RecognitionScreen> createState() => _RecognitionScreenState();
 }
 
 enum _ResultStatus {
@@ -22,7 +22,7 @@ enum _ResultStatus {
   found,
 }
 
-class _ImageRecognizerState extends State<ImageRecognizer> {
+class _RecognitionScreenState extends State<RecognitionScreen> {
   bool _isAnalyzing = false;
   final picker = ImagePicker();
   File? _selectedImageFile;
@@ -68,7 +68,7 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
             child: _buildTitle(),
           ),
           const SizedBox(height: 20),
-          _buildPhotolView(),
+          _photoView(),
           const SizedBox(height: 10),
           _buildResultView(),
           const Spacer(flex: 5),
@@ -86,7 +86,7 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
     );
   }
 
-  Widget _buildPhotolView() {
+  Widget _photoView() {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
@@ -180,7 +180,7 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
     var title = '';
 
     if (_resultStatus == _ResultStatus.notFound) {
-      title = 'Fail to recognise';
+      title = 'Failed to recognise';
     } else if (_resultStatus == _ResultStatus.found) {
       title = _plantLabel;
     } else {
