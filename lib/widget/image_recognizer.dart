@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import '../classifier/classifier.dart';
+import '../classifier.dart';
 import '../styles.dart';
 import 'image_view.dart';
 
@@ -37,12 +37,12 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
   @override
   void initState() {
     super.initState();
-    _loadClassifier();
+    _loadImageClassifier();
   }
 
-  Future<void> _loadClassifier() async {
+  Future<void> _loadImageClassifier() async {
     debugPrint(
-      'Start loading of Classifier with '
+      'Start loading of image classifier with '
       'labels at $_labelsFileName, '
       'model at $_modelFileName',
     );
@@ -63,21 +63,25 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
         mainAxisSize: MainAxisSize.max,
         children: [
           const Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: _buildTitle(),
+          const Padding(
+            padding: EdgeInsets.only(top: 30),
+            child: Text(
+              'Plant Recogniser',
+              style: kTitleTextStyle,
+              textAlign: TextAlign.center,
+            ),
           ),
           const SizedBox(height: 20),
-          _buildPhotolView(),
+          _imageWidget(),
           const SizedBox(height: 10),
-          _buildResultView(),
+          _recognizeImageResultWidget(),
           const Spacer(flex: 5),
-          _buildPickPhotoButton(
-            title: 'Take a photo',
+          _selectImageButtonWidget(
+            title: 'Take a photo.',
             source: ImageSource.camera,
           ),
-          _buildPickPhotoButton(
-            title: 'Pick from gallery',
+          _selectImageButtonWidget(
+            title: 'Select from Camera Roll.',
             source: ImageSource.gallery,
           ),
           const Spacer(),
@@ -86,37 +90,29 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
     );
   }
 
-  Widget _buildPhotolView() {
+  Widget _imageWidget() {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
-        PlantPhotoView(file: _selectedImageFile),
-        _buildAnalyzingText(),
+        ImageView(file: _selectedImageFile),
+        _analyzingMessageWidget(),
       ],
     );
   }
 
-  Widget _buildAnalyzingText() {
+  Widget _analyzingMessageWidget() {
     if (!_isAnalyzing) {
       return const SizedBox.shrink();
     }
     return const Text('Analyzing...', style: kAnalyzingTextStyle);
   }
 
-  Widget _buildTitle() {
-    return const Text(
-      'Plant Recogniser',
-      style: kTitleTextStyle,
-      textAlign: TextAlign.center,
-    );
-  }
-
-  Widget _buildPickPhotoButton({
+  Widget _selectImageButtonWidget({
     required ImageSource source,
     required String title,
   }) {
     return TextButton(
-      onPressed: () => _onPickPhoto(source),
+      onPressed: () => _onSelectImage(source),
       child: Container(
         width: 300,
         height: 50,
@@ -133,13 +129,7 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
     );
   }
 
-  void _setAnalyzing(bool flag) {
-    setState(() {
-      _isAnalyzing = flag;
-    });
-  }
-
-  void _onPickPhoto(ImageSource source) async {
+  void _onSelectImage(ImageSource source) async {
     final pickedFile = await picker.pickImage(source: source);
 
     if (pickedFile == null) {
@@ -147,6 +137,7 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
     }
 
     final imageFile = File(pickedFile.path);
+
     setState(() {
       _selectedImageFile = imageFile;
     });
@@ -155,10 +146,11 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
   }
 
   void _analyzeImage(File image) {
-    _setAnalyzing(true);
+    setState(() {
+      _isAnalyzing = true;
+    });
 
     final imageInput = img.decodeImage(image.readAsBytesSync())!;
-
     final resultCategory = _classifier.predict(imageInput);
 
     final result = resultCategory.score >= 0.8
@@ -167,7 +159,9 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
     final plantLabel = resultCategory.label;
     final accuracy = resultCategory.score;
 
-    _setAnalyzing(false);
+    setState(() {
+      _isAnalyzing = false;
+    });
 
     setState(() {
       _resultStatus = result;
@@ -176,7 +170,7 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
     });
   }
 
-  Widget _buildResultView() {
+  Widget _recognizeImageResultWidget() {
     var title = '';
 
     if (_resultStatus == _ResultStatus.notFound) {
@@ -187,8 +181,8 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
       title = '';
     }
 
-    //
     var accuracyLabel = '';
+
     if (_resultStatus == _ResultStatus.found) {
       accuracyLabel = 'Accuracy: ${(_accuracy * 100).toStringAsFixed(2)}%';
     }

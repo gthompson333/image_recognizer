@@ -1,12 +1,8 @@
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:image/image.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
-
-import 'classifier_category.dart';
-import 'classifier_model.dart';
 
 typedef ClassifierLabels = List<String>;
 
@@ -152,3 +148,34 @@ class Classifier {
     return inputTensor;
   }
 }
+
+class ClassifierCategory {
+  final String label;
+  final double score;
+
+  ClassifierCategory(this.label, this.score);
+
+  @override
+  String toString() {
+    return 'Category{label: $label, score: $score}';
+  }
+}
+
+class ClassifierModel {
+  Interpreter interpreter;
+
+  List<int> inputShape;
+  List<int> outputShape;
+
+  TfLiteType inputType;
+  TfLiteType outputType;
+
+  ClassifierModel({
+    required this.interpreter,
+    required this.inputShape,
+    required this.outputShape,
+    required this.inputType,
+    required this.outputType,
+  });
+}
+

@@ -2,9 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../styles.dart';
 
-class PlantPhotoView extends StatelessWidget {
+class ImageView extends StatelessWidget {
   final File? file;
-  const PlantPhotoView({super.key, this.file});
+
+  const ImageView({super.key, this.file});
 
   @override
   Widget build(BuildContext context) {
@@ -13,15 +14,15 @@ class PlantPhotoView extends StatelessWidget {
       height: 250,
       color: Colors.blueGrey,
       child: (file == null)
-          ? _buildEmptyView()
+          ? _pickAnImageWidget()
           : Image.file(file!, fit: BoxFit.cover),
     );
   }
 
-  Widget _buildEmptyView() {
+  Widget _pickAnImageWidget() {
     return const Center(
         child: Text(
-      'Please pick a photo',
+      'Pick an image.',
       style: kAnalyzingTextStyle,
     ));
   }

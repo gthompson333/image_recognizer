@@ -4,16 +4,16 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:image_recognizer/styles.dart';
 import 'package:image_recognizer/widget/image_view.dart';
-import 'classifier/classifier.dart';
+import 'classifier.dart';
 
 const _labelsFileName = 'assets/labels.txt';
 const _modelFileName = 'model_unquant.tflite';
 
-class RecognitionScreen extends StatefulWidget {
-  const RecognitionScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<RecognitionScreen> createState() => _RecognitionScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 enum _ResultStatus {
@@ -22,7 +22,7 @@ enum _ResultStatus {
   found,
 }
 
-class _RecognitionScreenState extends State<RecognitionScreen> {
+class _MainScreenState extends State<MainScreen> {
   bool _isAnalyzing = false;
   final picker = ImagePicker();
   File? _selectedImageFile;
@@ -90,7 +90,7 @@ class _RecognitionScreenState extends State<RecognitionScreen> {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
-        PlantPhotoView(file: _selectedImageFile),
+        ImageView(file: _selectedImageFile),
         _buildAnalyzingText(),
       ],
     );

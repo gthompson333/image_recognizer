@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'recognition_screen.dart';
+import 'main_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,10 +18,9 @@ class MainApp extends StatelessWidget {
       ],
     );
     return MaterialApp(
-      title: 'Plant Recognizer',
+      title: 'Image Recognizer',
       theme: ThemeData.light(),
-      home: const RecognitionScreen(),
-      debugShowCheckedModeBanner: false,
+      home: const MainScreen(),
     );
   }
 }
