@@ -116,14 +116,14 @@ class _ImageRecognizerState extends State<ImageRecognizer> {
       child: Container(
         width: 300,
         height: 50,
-        color: kColorBrown,
+        color: colorSuperheroRed,
         child: Center(
             child: Text(title,
                 style: const TextStyle(
-                  fontFamily: kButtonFont,
+                  fontFamily: robotoFont,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
-                  color: kColorLightYellow,
+                  color: colorSuperheroBlue,
                 ))),
       ),
     );

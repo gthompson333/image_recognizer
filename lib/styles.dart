@@ -1,47 +1,35 @@
 import 'package:flutter/material.dart';
 
-const kMainFont = 'Roboto';
-const kButtonFont = 'Roboto';
-const kDisplayFont = 'SquadaOne';
+const robotoFont = 'Roboto';
+const squadaOne = 'SquadaOne';
 
-const kColorGreen = Color(0xFF395144);
-const kColorLightGreen = Color(0XFF4E6C50);
-const kColorBrown = Color(0XFFAA8B56);
-const kColorLightYellow = Color(0xFFF0EBCE);
+const colorSuperheroBlue = Color.fromARGB(255, 11, 105, 242);
+const colorSuperheroRed = Color.fromARGB(255, 240, 21, 30);
+const colorSuperheroYellow = Color.fromARGB(255, 245, 227, 10);
 
-const kColorRed = Color(0xFFD96666);
-const kColorLightRed = Color(0xFFF2CECE);
-const kColorLightGray = Color(0xFFDDDDDD);
-
-const kColorHunterGreen = Color(0xFF386641);
-const kColorMayGreen = Color(0xFF6a994e);
-const kColorAndroidGreen = Color(0xFFa7c957);
-const kColorEggshell = Color(0xFFf2e8cf);
-const kColorBitterSweetShimmer = Color(0xFFbc4749);
-
-const kBgColor = kColorGreen;
+const kBgColor = colorSuperheroBlue;
 
 const kTitleTextStyle = TextStyle(
-  fontFamily: kDisplayFont,
+  fontFamily: squadaOne,
   fontSize: 50.0,
-  color: kColorAndroidGreen,
+  color: colorSuperheroYellow,
   decoration: TextDecoration.none,
 );
 
 const kAnalyzingTextStyle = TextStyle(
-    fontFamily: kMainFont,
+    fontFamily: robotoFont,
     fontSize: 25.0,
-    color: kColorEggshell,
+    color: colorSuperheroYellow,
     decoration: TextDecoration.none);
 
 const kResultTextStyle = TextStyle(
-    fontFamily: kDisplayFont,
+    fontFamily: squadaOne,
     fontSize: 35.0,
-    color: kColorLightYellow,
+    color: colorSuperheroYellow,
     decoration: TextDecoration.none);
 
 const kResultRatingTextStyle = TextStyle(
-    fontFamily: kMainFont,
+    fontFamily: robotoFont,
     fontSize: 18.0,
-    color: Colors.white,
+    color: colorSuperheroYellow,
     decoration: TextDecoration.none);

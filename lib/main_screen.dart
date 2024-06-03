@@ -65,19 +65,19 @@ class _MainScreenState extends State<MainScreen> {
           const Spacer(),
           Padding(
             padding: const EdgeInsets.only(top: 30),
-            child: _buildTitle(),
+            child: _titleWidget(),
           ),
           const SizedBox(height: 20),
-          _photoView(),
+          _photoViewWidget(),
           const SizedBox(height: 10),
-          _buildResultView(),
+          _resultViewWidget(),
           const Spacer(flex: 5),
-          _buildPickPhotoButton(
+          _pickPhotoButtonWidget(
             title: 'Take a photo',
             source: ImageSource.camera,
           ),
-          _buildPickPhotoButton(
-            title: 'Pick from gallery',
+          _pickPhotoButtonWidget(
+            title: 'Pick from camera roll',
             source: ImageSource.gallery,
           ),
           const Spacer(),
@@ -86,32 +86,32 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _photoView() {
+  Widget _titleWidget() {
+    return const Text(
+      'Who\'s That Superhero?',
+      style: kTitleTextStyle,
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _photoViewWidget() {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
         ImageView(file: _selectedImageFile),
-        _buildAnalyzingText(),
+        _analyzingTextWidget(),
       ],
     );
   }
 
-  Widget _buildAnalyzingText() {
+  Widget _analyzingTextWidget() {
     if (!_isAnalyzing) {
       return const SizedBox.shrink();
     }
     return const Text('Analyzing...', style: kAnalyzingTextStyle);
   }
 
-  Widget _buildTitle() {
-    return const Text(
-      'Plant Recogniser',
-      style: kTitleTextStyle,
-      textAlign: TextAlign.center,
-    );
-  }
-
-  Widget _buildPickPhotoButton({
+  Widget _pickPhotoButtonWidget({
     required ImageSource source,
     required String title,
   }) {
@@ -120,23 +120,17 @@ class _MainScreenState extends State<MainScreen> {
       child: Container(
         width: 300,
         height: 50,
-        color: kColorBrown,
+        color: colorSuperheroRed,
         child: Center(
             child: Text(title,
                 style: const TextStyle(
-                  fontFamily: kButtonFont,
+                  fontFamily: robotoFont,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
-                  color: kColorLightYellow,
+                  color: colorSuperheroYellow,
                 ))),
       ),
     );
-  }
-
-  void _setAnalyzing(bool flag) {
-    setState(() {
-      _isAnalyzing = flag;
-    });
   }
 
   void _onPickPhoto(ImageSource source) async {
@@ -155,19 +149,23 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _analyzeImage(File image) {
-    _setAnalyzing(true);
+    setState(() {
+      _isAnalyzing = true;
+    });
 
     final imageInput = img.decodeImage(image.readAsBytesSync())!;
-
     final resultCategory = _classifier.predict(imageInput);
 
     final result = resultCategory.score >= 0.8
         ? _ResultStatus.found
         : _ResultStatus.notFound;
+
     final plantLabel = resultCategory.label;
     final accuracy = resultCategory.score;
 
-    _setAnalyzing(false);
+    setState(() {
+      _isAnalyzing = false;
+    });
 
     setState(() {
       _resultStatus = result;
@@ -176,19 +174,17 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Widget _buildResultView() {
+  Widget _resultViewWidget() {
     var title = '';
 
     if (_resultStatus == _ResultStatus.notFound) {
       title = 'Failed to recognise';
     } else if (_resultStatus == _ResultStatus.found) {
       title = _plantLabel;
-    } else {
-      title = '';
     }
 
-    //
     var accuracyLabel = '';
+
     if (_resultStatus == _ResultStatus.found) {
       accuracyLabel = 'Accuracy: ${(_accuracy * 100).toStringAsFixed(2)}%';
     }

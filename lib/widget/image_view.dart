@@ -15,14 +15,15 @@ class ImageView extends StatelessWidget {
       color: Colors.blueGrey,
       child: (file == null)
           ? _pickAnImageWidget()
-          : Image.file(file!, fit: BoxFit.cover),
+          : Image.file(file!, fit: BoxFit.contain),
     );
   }
 
   Widget _pickAnImageWidget() {
     return const Center(
         child: Text(
-      'Pick an image.',
+      'Pick a Superhero image ...',
+      textAlign: TextAlign.center,
       style: kAnalyzingTextStyle,
     ));
   }

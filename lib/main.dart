@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
       ],
     );
     return MaterialApp(
-      title: 'Image Recognizer',
+      title: 'Superhero Recognizer',
       theme: ThemeData.light(),
       home: const MainScreen(),
     );
