@@ -25,7 +25,7 @@ class TFLiteInterpreter {
       final model = await _loadModel(modelFileName);
       return TFLiteInterpreter._(labels: labels, model: model);
     } catch (e) {
-      debugPrint('Can\'t initialize Classifier: ${e.toString()}');
+      debugPrint('Can\'t initialize Interpreter: ${e.toString()}');
       if (e is Error) {
         debugPrintStack(stackTrace: e.stackTrace);
       }

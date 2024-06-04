@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'MLInterpreter/tf_lite_interpreter.dart';
 import 'Style/styles.dart';
 
-const _labelsFileName = 'assets/labels.txt';
-const _modelFileName = 'model_unquant.tflite';
+const _labelsFileName = 'assets/superhero_tf_labels.txt';
+const _modelFileName = 'superhero_tf_model.tflite';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -40,11 +40,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _loadClassifier() async {
-    debugPrint(
-      'Start loading of Classifier with '
-          'labels at $_labelsFileName, '
-          'model at $_modelFileName',
-    );
+    debugPrint("Loading interpreter with labels at $_labelsFileName, model at $_modelFileName");
 
     final classifier = await TFLiteInterpreter.loadWith(
       labelsFileName: _labelsFileName,
@@ -87,7 +83,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _titleWidget() {
     return const Text(
-      'Who\'s That Superhero?',
+      'Whos That Superhero?',
       style: kTitleTextStyle,
       textAlign: TextAlign.center,
     );
@@ -107,7 +103,7 @@ class _MainScreenState extends State<MainScreen> {
     if (!_isAnalyzing) {
       return const SizedBox.shrink();
     }
-    return const Text('Analyzing...', style: kAnalyzingTextStyle);
+    return const Text('Interpreting ...', style: kAnalyzingTextStyle);
   }
 
   Widget _pickPhotoButtonWidget({
@@ -177,7 +173,7 @@ class _MainScreenState extends State<MainScreen> {
     var title = '';
 
     if (_resultStatus == _ResultStatus.notFound) {
-      title = 'Failed to recognise';
+      title = 'Failed to interpret';
     } else if (_resultStatus == _ResultStatus.found) {
       title = _plantLabel;
     }
