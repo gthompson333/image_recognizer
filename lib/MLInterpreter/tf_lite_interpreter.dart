@@ -6,24 +6,24 @@ import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 
 typedef ClassifierLabels = List<String>;
 
-class Classifier {
+class TFLiteInterpreter {
   final ClassifierLabels _labels;
-  final ClassifierModel _model;
+  final InterpreterModel _model;
 
-  Classifier._({
+  TFLiteInterpreter._({
     required ClassifierLabels labels,
-    required ClassifierModel model,
+    required InterpreterModel model,
   })  : _labels = labels,
         _model = model;
 
-  static Future<Classifier?> loadWith({
+  static Future<TFLiteInterpreter?> loadWith({
     required String labelsFileName,
     required String modelFileName,
   }) async {
     try {
       final labels = await _loadLabels(labelsFileName);
       final model = await _loadModel(modelFileName);
-      return Classifier._(labels: labels, model: model);
+      return TFLiteInterpreter._(labels: labels, model: model);
     } catch (e) {
       debugPrint('Can\'t initialize Classifier: ${e.toString()}');
       if (e is Error) {
@@ -33,7 +33,7 @@ class Classifier {
     }
   }
 
-  static Future<ClassifierModel> _loadModel(String modelFileName) async {
+  static Future<InterpreterModel> _loadModel(String modelFileName) async {
     final interpreter = await Interpreter.fromAsset(modelFileName);
 
     // Get input and output shape from the model
@@ -50,7 +50,7 @@ class Classifier {
     debugPrint('Input type: $inputType');
     debugPrint('Output type: $outputType');
 
-    return ClassifierModel(
+    return InterpreterModel(
       interpreter: interpreter,
       inputShape: inputShape,
       outputShape: outputShape,
@@ -75,7 +75,7 @@ class Classifier {
     _model.interpreter.close();
   }
 
-  ClassifierCategory predict(Image image) {
+  InterpreterResult predict(Image image) {
     debugPrint(
       'Image: ${image.width}x${image.height}, '
       'size: ${image.length} bytes',
@@ -109,21 +109,21 @@ class Classifier {
     return topResult;
   }
 
-  List<ClassifierCategory> _postProcessOutput(TensorBuffer outputBuffer) {
+  List<InterpreterResult> _postProcessOutput(TensorBuffer outputBuffer) {
     final probabilityProcessor = TensorProcessorBuilder().build();
 
     probabilityProcessor.process(outputBuffer);
 
     final labelledResult = TensorLabel.fromList(_labels, outputBuffer);
+    final categoryList = <InterpreterResult>[];
 
-    final categoryList = <ClassifierCategory>[];
-    labelledResult.getMapWithFloatValue().forEach((key, value) {
-      final category = ClassifierCategory(key, value);
+    labelledResult.getMapWithFloatValue().forEach((label, score) {
+      final category = InterpreterResult(label: label, score: score);
       categoryList.add(category);
       debugPrint('label: ${category.label}, score: ${category.score}');
     });
-    categoryList.sort((a, b) => (b.score > a.score ? 1 : -1));
 
+    categoryList.sort((a, b) => (b.score > a.score ? 1 : -1));
     return categoryList;
   }
 
@@ -149,19 +149,19 @@ class Classifier {
   }
 }
 
-class ClassifierCategory {
+class InterpreterResult {
   final String label;
   final double score;
 
-  ClassifierCategory(this.label, this.score);
+  InterpreterResult({required this.label, required this.score});
 
   @override
   String toString() {
-    return 'Category{label: $label, score: $score}';
+    return 'Interpreter Result - label: $label score: $score';
   }
 }
 
-class ClassifierModel {
+class InterpreterModel {
   Interpreter interpreter;
 
   List<int> inputShape;
@@ -170,7 +170,7 @@ class ClassifierModel {
   TfLiteType inputType;
   TfLiteType outputType;
 
-  ClassifierModel({
+  InterpreterModel({
     required this.interpreter,
     required this.inputShape,
     required this.outputShape,
@@ -178,4 +178,3 @@ class ClassifierModel {
     required this.outputType,
   });
 }
-

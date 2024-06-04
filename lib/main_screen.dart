@@ -2,9 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:image_recognizer/styles.dart';
-import 'package:image_recognizer/widget/image_view.dart';
-import 'classifier.dart';
+import 'MLInterpreter/tf_lite_interpreter.dart';
+import 'Style/styles.dart';
 
 const _labelsFileName = 'assets/labels.txt';
 const _modelFileName = 'model_unquant.tflite';
@@ -32,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
   String _plantLabel = ''; // Name of Error Message
   double _accuracy = 0.0;
 
-  late Classifier _classifier;
+  late TFLiteInterpreter _classifier;
 
   @override
   void initState() {
@@ -47,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
           'model at $_modelFileName',
     );
 
-    final classifier = await Classifier.loadWith(
+    final classifier = await TFLiteInterpreter.loadWith(
       labelsFileName: _labelsFileName,
       modelFileName: _modelFileName,
     );
@@ -198,3 +197,31 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
+class ImageView extends StatelessWidget {
+  final File? file;
+
+  const ImageView({super.key, this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 250,
+      height: 250,
+      color: Colors.blueGrey,
+      child: (file == null)
+          ? _pickAnImageWidget()
+          : Image.file(file!, fit: BoxFit.contain),
+    );
+  }
+
+  Widget _pickAnImageWidget() {
+    return const Center(
+        child: Text(
+          'Pick a Superhero image ...',
+          textAlign: TextAlign.center,
+          style: kAnalyzingTextStyle,
+        ));
+  }
+}
+

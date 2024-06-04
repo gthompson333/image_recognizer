@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
       ],
     );
     return MaterialApp(
-      title: 'Superhero Recognizer',
+      title: 'Whos That Superhero?',
       theme: ThemeData.light(),
       home: const MainScreen(),
     );

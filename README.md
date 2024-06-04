@@ -1,16 +1,11 @@
-# image_recognizer
+# whos_that_superhero
 
-A Flutter app that uses a TensorFlow Lite ML model to recognize images.
+A Flutter app that uses a TensorFlow Lite ML model to do inference on a Superhero image to determine
+who the Superhero is.
 
-## Getting Started
+# Usage
 
-This project is a starting point for a Flutter application.
+Launch the app, select an image of a Superhero and see the Tensorflow Lite machine learning
+interpretation result to find out who the Superhero is.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

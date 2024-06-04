@@ -1,5 +1,6 @@
-name: image_recognizer
-description: "A Flutter app that uses a TensorFlow Lite ML model to recognize images."
+name: whos_that_superhero
+description: "A Flutter app that uses a TensorFlow Lite ML model to do inference on a Superhero image to determine
+who the Superhero is."
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
